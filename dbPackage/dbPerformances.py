@@ -10,7 +10,6 @@ def publishPerformance(performance_id):
           conn = sqlite3.connect(DATABASE)
           cursor = conn.cursor()
           cursor.execute(sql, (performance_id,))
-          
           conn.commit()
           
           cursor.close()
@@ -58,3 +57,14 @@ def getNoPerformances():
     cursor.close()
     conn.close()
     return count
+
+def clearPerformances():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute("DELETE FROM Performances")
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='Performances'")
+    
+    conn.commit()
+    cursor.close()
+    conn.close()

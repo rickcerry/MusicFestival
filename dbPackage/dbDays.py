@@ -1,13 +1,13 @@
-from dbPackage import DATABASE
+from . import DATABASE
 import sqlite3
 
 def insertDay(day, format):
-    sql = "INSERT INTO Days (Day, YYYY_MM_GG) VALUES (?, ?)"
+    sql = "INSERT INTO Days (Day, YYYY_MM_DD) VALUES (?, ?)"
     
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     cursor.execute(sql, (day, format))
-    
+
     conn.commit()
     
     cursor.close()
@@ -25,3 +25,14 @@ def getNoDays():
     cursor.close()
     conn.close()
     return count
+
+def clearDays():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute("DELETE FROM Days")
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='Days'")
+    
+    conn.commit()
+    cursor.close()
+    conn.close()

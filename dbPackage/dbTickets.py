@@ -35,7 +35,7 @@ def getTickets():
     return tickets
 
 # Given an ID, returns the ticket
-def getStage(id):
+def getTicketType(id):
     sql = "SELECT * FROM Tickets WHERE Tickets.ID = ?"
 
     conn = sqlite3.connect(DATABASE)
@@ -84,3 +84,14 @@ def getNoTickets():
     cursor.close()
     conn.close()
     return count
+
+def clearDays():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute("DELETE FROM Tickets")
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='Tickets'")
+    
+    conn.commit()
+    cursor.close()
+    conn.close()

@@ -3,6 +3,18 @@ import sqlite3
 
 # Designed for Stages table 
 
+def insertStage(primary, secondary):
+    sql = "INSERT INTO Stages (PrimaryName, SecondaryName) VALUES (?, ?)"
+    
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute(sql, (primary, secondary))
+    
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+
 # Get all stages
 def getStages():
     sql = "SELECT * FROM Stages"
@@ -34,3 +46,15 @@ def getStage(id):
     conn.close()
 
     return stage
+
+def clearStages():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute("DELETE FROM Stages")
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='Stages'")
+
+    
+    conn.commit()
+    cursor.close()
+    conn.close()

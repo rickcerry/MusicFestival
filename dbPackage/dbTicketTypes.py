@@ -3,6 +3,18 @@ import sqlite3
 
 # Designed for TicketTypes table 
 
+def insertTicketType(name, noOfDays, description, cost):
+    sql = "INSERT INTO TicketTypes (Name, NoOfDays, Description, Cost) VALUES (?, ?, ?, ?)"
+    
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute(sql, (name, noOfDays, description, cost))
+    
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+
 # Get all ticket types
 def getTicketTypes():
     sql = "SELECT * FROM TicketTypes"
@@ -48,3 +60,15 @@ def getNoTicketTypes():
     cursor.close()
     conn.close()
     return count
+
+def clearTicketTypes():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute("DELETE FROM TicketTypes")
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='TicketTypes'")
+
+    
+    conn.commit()
+    cursor.close()
+    conn.close()

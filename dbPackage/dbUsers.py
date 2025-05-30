@@ -47,3 +47,15 @@ def getUsers():
     conn.close()
 
     return users
+
+def clearUsers():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute("DELETE FROM Users")
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='Users'")
+
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
