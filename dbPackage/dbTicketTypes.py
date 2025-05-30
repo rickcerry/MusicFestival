@@ -3,6 +3,14 @@ import sqlite3
 
 # Designed for TicketTypes table 
 
+def formattedDescription(results):
+    formatted = []
+    for result in results:
+        new_tuple = result[:3] + (result[3].split("-"),) + result[4:]
+        formatted.append(new_tuple)
+    return formatted
+    
+
 def insertTicketType(name, noOfDays, description, cost):
     sql = "INSERT INTO TicketTypes (Name, NoOfDays, Description, Cost) VALUES (?, ?, ?, ?)"
     
@@ -24,7 +32,7 @@ def getTicketTypes():
     cursor = conn.cursor()
     cursor.execute(sql)
 
-    ticketTypes = cursor.fetchall()
+    ticketTypes = formattedDescription(cursor.fetchall())
     
     cursor.close()
     conn.close()
@@ -40,7 +48,7 @@ def getTicketType(id):
     cursor = conn.cursor()
     cursor.execute(sql, (id,))
     
-    ticketType = cursor.fetchone()
+    ticketType = formattedDescription(cursor.fetchone())
 
     cursor.close()
     conn.close()
