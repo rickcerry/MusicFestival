@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+  {% for ticket in tickets %}
+  <div class="col">
+    <div class="card mb-4 rounded-3 shadow-sm">
+      <div class="card-header py-3">
+        <h4 class="my-0 fw-normal">{{ ticket[1] | e}}</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="card-title pricing-card-title">€{{ticket[4] | e}}</h1>
+        <ul class="list mt-3 mb-4">
+          {% for point in ticket[3]%}
+          <li>{{point | e}}</li>
+          {% endfor %}
+        </ul>
+        <button type="button" class="w-100 btn btn-lg btn-outline-primary">
+          Sign up for free
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
