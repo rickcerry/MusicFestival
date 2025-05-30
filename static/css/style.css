@@ -1,0 +1,28 @@
+.numbersBox {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          flex-wrap: wrap;
+}
+
+.dove {
+  background-color: #e0f7fa; /* Azzurro chiaro */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.quando {
+  background-color: #936823; /* Arancione chiaro */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.numero{
+          background-color: rgb(131, 255, 154);
+          border-radius: 8px;
+}
+
+article{
+        padding-bottom:50px;
+}

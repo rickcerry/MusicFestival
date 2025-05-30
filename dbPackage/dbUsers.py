@@ -1,0 +1,49 @@
+from dbPackage import DATABASE
+import sqlite3
+
+# Designed for Users table 
+
+# Inserts a user
+def insertUser(name, surname, email, typeUser):
+    sql = "INSERT INTO Users (Name, Surname, EMail, Type) VALUES (?, ?, ?, ?)"
+    
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute(sql, (name, surname, email, typeUser))
+    
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+
+# Given an ID, returns the user
+def getUser(id):
+    sql = "SELECT * FROM Users WHERE Users.ID = ?"
+
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    
+    user = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return user
+
+# Get all users
+def getUsers():
+    sql = "SELECT * FROM Users"
+  
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(sql)
+
+    users = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+
+    return users
