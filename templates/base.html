@@ -54,10 +54,26 @@
         </ul>
         <ul class="nav">
           <li class="nav-item">
-            <a href="#" class="nav-link link-body-emphasis px-2">Login</a>
+            <button
+              type="button"
+              class="btn nav-link link-body-emphasis px-2"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+              style="background: none; border: none"
+            >
+              Login
+            </button>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link link-body-emphasis px-2">Sign up</a>
+            <button
+              type="button"
+              class="btn nav-link link-body-emphasis px-2"
+              data-bs-toggle="modal"
+              data-bs-target="#signUpModal"
+              style="background: none; border: none"
+            >
+              Iscriviti
+            </button>
           </li>
         </ul>
       </div>
@@ -75,5 +91,215 @@
     </header>
 
     <div class="container px-5 py-3">{% block content %} {% endblock %}</div>
+
+    <!-- Modal login -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Chiudi"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <form method="POST" action="{{ url_for('auth') }}">
+              <h1 class="h5 mb-3 text-center">Accedi</h1>
+
+              <div class="form-floating mb-2">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="name@example.com"
+                  name="email"
+                  required
+                />
+                <label for="email">Indirizzo di posta elettronica</label>
+              </div>
+
+              <div class="form-floating mb-2">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Password"
+                  name="password"
+                  required
+                />
+                <label for="floatingPassword">Password</label>
+              </div>
+
+              <div class="form-check text-start mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="remember-me"
+                  id="checkDefault"
+                />
+                <label class="form-check-label" for="checkDefault">
+                  Remember me
+                </label>
+              </div>
+
+              <button class="btn btn-primary w-100 py-2" type="submit">
+                Sign in
+              </button>
+              <p class="mt-4 mb-2 text-body-secondary text-center">
+                © 20172025
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal signup -->
+    <div
+      class="modal fade"
+      id="signUpModal"
+      tabindex="-1"
+      aria-labelledby="signUpModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="signUpModalLabel">
+              Acquista il tuo biglietto
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Chiudi"
+            ></button>
+          </div>
+
+          <form method="POST" action="{{ url_for('sign_up') }}">
+            <div class="modal-body">
+              <div class="row g-3">
+                <!-- Nome -->
+                <div class="col-6">
+                  <label for="name" class="form-label">Nome *</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                  />
+                </div>
+
+                <!-- Cognome -->
+                <div class="col-6">
+                  <label for="surname" class="form-label">Cognome *</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="surname"
+                    name="surname"
+                    required
+                  />
+                </div>
+
+                <!-- Email -->
+                <div class="col-6">
+                  <label for="email" class="form-label">Indirizzo mail *</label>
+                  <input
+                    class="form-control"
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                  />
+                </div>
+
+                <!-- Password -->
+                <div class="col-6">
+                  <label for="email" class="form-label">Password *</label>
+                  <input
+                    class="form-control"
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                  />
+                </div>
+
+                <!-- Ruolo -->
+                <div class="col-12">
+                  <label class="form-label">Ruolo *</label>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="typeUser"
+                      id="typeUser1"
+                      value="Spettatore"
+                      required
+                    />
+                    <label class="form-check-label" for="ticketType1">
+                      Spettatore
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="typeUser"
+                      id="typerUser2"
+                      value="Organizzatore"
+                    />
+                    <label class="form-check-label" for="ticketType2">
+                      Organizzatore
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- Disclaimer -->
+              <div class="alert alert-primary" role="alert">
+                <strong>⚠️ Attenzione:</strong><br />
+                Acquistando il biglietto dichiari di aver preso visione delle
+                seguenti condizioni:
+                <ul class="mb-0 mt-2">
+                  <li>
+                    <strong>I biglietti non sono rimborsabili</strong> in alcun
+                    caso, salvo annullamento dell’evento da parte
+                    dell’organizzazione.
+                  </li>
+                  <li>
+                    <strong
+                      >È possibile acquistare un solo biglietto per
+                      persona</strong
+                    >. Tentativi di acquisto multiplo non saranno considerati
+                    validi e potrebbero essere annullati.
+                  </li>
+                </ul>
+                <p class="mt-2 mb-0">
+                  Procedendo con l'acquisto, accetti integralmente queste
+                  condizioni.
+                </p>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Invia</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
