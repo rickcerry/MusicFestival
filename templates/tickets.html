@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 
-<!-- Messaggio di conferma -->
+<!-- Alerts -->
 <div class="alert alert-primary" role="alert">
   Ti ricordiamo che in quanto <strong>organizzatore</strong> non hai il diritto
   di acquistare un biglietto per il festival. Puoi consultare i prezzi e le
@@ -56,9 +56,7 @@
       <div class="card-body">
         <h1 class="card-title pricing-card-title">€{{ticket[4] | e}}</h1>
         <ul class="list mt-3 mb-4">
-          {% for point in ticket[3]%}
-          <li>{{point | e}}</li>
-          {% endfor %}
+          {{ ticket["Description"] | safe }}
         </ul>
       </div>
     </div>
@@ -207,15 +205,14 @@
                 {% for day in days %}
                 <div class="col-md-7">
                   <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="days-{{ day[0] }}"
-                      name="days"
-                      value="{{ day[0] }}"
-                    />
-                    <label class="form-check-label" for="days-{{ day[0] }}">
-                      {{ day[1] }}
+                    <input class="form-check-input" type="checkbox" id="days-{{
+                    day['ID'] }}" name="days" value="{{ day['ID'] }}" {% if
+                    day['NoPeople'] > 200 %}disabled title="Giornata al
+                    completo"{% endif %} />
+                    <label class="form-check-label" for="days-{{ day['ID'] }}">
+                      {{ day["Day"] }} {% if day['NoPeople'] > 200 %}
+                      <span class="text-danger">(non disponibile)</span>
+                      {% endif %}
                     </label>
                   </div>
                 </div>
