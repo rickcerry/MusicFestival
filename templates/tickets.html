@@ -1,5 +1,51 @@
 {% extends "base.html" %} {% block content %}
 
+<!-- Messaggio di conferma -->
+<div class="alert alert-primary" role="alert">
+  Ti ricordiamo che in quanto <strong>organizzatore</strong> non hai il diritto
+  di acquistare un biglietto per il festival. Puoi consultare i prezzi e le
+  specifiche dei biglietti.
+</div>
+<div
+  class="alert alert-success alert-dismissible fade show d-flex align-items-center"
+  role="alert"
+>
+  <div>
+    <strong>Biglietto acquistato correttamente!</strong>
+    Per controllare i dettagli del tuo biglietto, accedi alla tua area
+    personale.
+  </div>
+  <button
+    type="button"
+    class="btn-close ms-auto"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+<div
+  class="alert alert-warning alert-dismissible fade show d-flex align-items-center"
+  role="alert"
+>
+  <div>
+    <strong>Attenzione!</strong>
+    Hai inserito un numero di giorni errato o una sequenza errata di giornate.
+    Il biglietto non è stato prenotato.
+  </div>
+  <button
+    type="button"
+    class="btn-close ms-auto"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+
+<header
+  id="header_numeri"
+  class="d-flex justify-content-center align-items-center"
+>
+  <h3>I biglietti disponibili</h3>
+</header>
+
 <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
   {% for ticket in tickets %}
   <div class="col">
@@ -14,13 +60,200 @@
           <li>{{point | e}}</li>
           {% endfor %}
         </ul>
-        <button type="button" class="w-100 btn btn-lg btn-outline-primary">
-          Sign up for free
-        </button>
       </div>
     </div>
   </div>
   {% endfor %}
+</div>
+
+<div class="d-grid gap-2 col-12 col-md-6 mx-auto">
+  {% if not ticketBooked %}
+  <button
+    type="button"
+    class="btn btn-lg btn-outline-primary w-100"
+    data-bs-toggle="modal"
+    data-bs-target="#bookingModal"
+  >
+    Acquista ora il tuo biglietto
+  </button>
+  {% endif %}
+
+  <button type="button" class="btn disabled btn-lg btn-outline-primary w-100">
+    Effettua il login
+  </button>
+
+  <button type="button" class="btn disabled btn-lg btn-warning w-100">
+    Non puoi acquistare il tuo biglietto
+  </button>
+  <button type="button" class="btn disabled btn-lg btn-danger w-100">
+    Hai già acquistato un biglietto
+  </button>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="bookingModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Acquista il tuo biglietto
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <form action="/publish" method="POST" enctype="multipart/form-data">
+        <!--Info acquisti-->
+        <div class="alert alert-light m-3" role="alert">
+          <strong
+            >🛒 Regole di selezione delle giornate in base alla tipologia di
+            biglietto:</strong
+          >
+          <ul class="mb-0 mt-2">
+            <li>
+              <strong>Biglietto Giornaliero:</strong> puoi selezionare
+              <u>solo una giornata</u>.
+            </li>
+            <li>
+              <strong>Pass 2 Giorni:</strong> devi selezionare
+              <u>esattamente due giornate consecutive</u>.
+            </li>
+            <li>
+              <strong>Full Pass:</strong> devi selezionare
+              <u>tutte e tre le giornate</u>.
+            </li>
+          </ul>
+          <p class="mt-2 mb-0">
+            Se non rispetti queste condizioni, il biglietto
+            <strong>non verrà prenotato</strong>.
+          </p>
+        </div>
+
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Nome -->
+            <div class="col-6">
+              <label for="name" class="form-label">Nome *</label>
+              <input
+                class="form-control"
+                type="text"
+                id="name"
+                name="name"
+                value="Riccardo Alfonso"
+                disabled
+              />
+            </div>
+
+            <!-- Cognome -->
+            <div class="col-6">
+              <label for="surname" class="form-label">Cognome *</label>
+              <input
+                class="form-control"
+                type="text"
+                id="surname"
+                name="surname"
+                value="Cerrone"
+                disabled
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="col-12">
+              <label for="email" class="form-label">Indirizzo mail *</label>
+              <input
+                class="form-control"
+                type="text"
+                id="email"
+                name="email"
+                value="riccardo.alfonsocer@outlook.it"
+                disabled
+              />
+            </div>
+
+            <!-- Tipologia di biglietto -->
+            <div class="col-6">
+              <label for="ticketType" class="form-label"
+                >Tipologia di biglietto *</label
+              >
+              <select
+                id="ticketType"
+                name="ticketType"
+                class="form-select"
+                required
+              >
+                <option value="" selected disabled>
+                  Seleziona la tipologia di biglietto
+                </option>
+                {% for ticket in tickets %}
+                <option value="{{ ticket[0] }}">{{ ticket[1] | e }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Giornate -->
+            <div class="col-6 mb-3">
+              <label class="form-label">Giornate *</label>
+              <div class="row">
+                {% for day in days %}
+                <div class="col-md-7">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="days-{{ day[0] }}"
+                      name="days"
+                      value="{{ day[0] }}"
+                    />
+                    <label class="form-check-label" for="days-{{ day[0] }}">
+                      {{ day[1] }}
+                    </label>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Disclamair-->
+        <div class="alert alert-primary m-3" role="alert">
+          <strong>⚠️ Attenzione:</strong><br />
+          Acquistando il biglietto dichiari di aver preso visione delle seguenti
+          condizioni:
+          <ul class="mb-0 mt-2">
+            <li>
+              <strong>I biglietti non sono rimborsabili</strong> in alcun caso,
+              salvo annullamento dell’evento da parte dell’organizzazione.
+            </li>
+            <li>
+              <strong
+                >È possibile acquistare un solo biglietto per persona</strong
+              >. Tentativi di acquisto multiplo non saranno considerati validi e
+              potrebbero essere annullati.
+            </li>
+          </ul>
+          <p class="mt-2 mb-0">
+            Procedendo con l'acquisto, accetti integralmente queste condizioni.
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Acquista</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
