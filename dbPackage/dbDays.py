@@ -1,17 +1,32 @@
 from . import DATABASE
 import sqlite3
 
-def insertDay(day, format):
-    sql = "INSERT INTO Days (Day, YYYY_MM_DD) VALUES (?, ?)"
+def insertDay(day, format, noPeople):
+    sql = "INSERT INTO Days (Day, YYYY_MM_DD, NoPeople) VALUES (?, ?, ?)"
     
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute(sql, (day, format))
+    cursor.execute(sql, (day, format, noPeople))
 
     conn.commit()
     
     cursor.close()
     conn.close()
+    
+def getDays():
+    sql = "SELECT * FROM Days"
+  
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(sql)
+
+    days = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+
+    return days
 
 def getNoDays():
     conn = sqlite3.connect(DATABASE)
