@@ -1,6 +1,152 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% block content %} {% if current_user.mode ==
+"Organizzatore" %}
+<h1>Bozze</h1>
 
-<div class="col-12 col-md-9 p-2">
+<button
+  type="button p-2"
+  class="btn btn-success"
+  data-bs-toggle="modal"
+  data-bs-target="#performanceModal"
+>
+  Aggiungi una nuova esibizione
+</button>
+
+<div class="col-12 col-md-9 py-4">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {# {% for performance in performances %} #}
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-header p-2">
+          <button type="button" class="btn btn-success btn-sm m-1 px-1">
+            Pubblica
+          </button>
+          <button type="button" class="btn btn-primary btn-sm m-1 px-1">
+            Modifica
+          </button>
+          <button type="button" class="btn btn-danger btn-sm m-1 px-1">
+            Elimina
+          </button>
+        </div>
+
+        <img
+          src="https://img.ilgcdn.com/sites/default/files/styles/xl/public/foto/2024/02/29/1709191791-bugo.jpg?_=1709191791"
+          class="card-img-top grayscale-img"
+          alt="Prova"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Prova</h5>
+          <p class="card-text">Prova</p>
+        </div>
+        <div class="card-footer">
+          <small class="text-body-secondary">Prova</small>
+        </div>
+      </div>
+    </div>
+    {# {% endfor %} #}
+  </div>
+</div>
+
+<h1>Esibizioni pubblicate</h1>
+
+<div
+  class="modal fade"
+  id="performanceModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Acquista il tuo biglietto
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <form action="/publish" method="POST" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Artist name -->
+            <div class="col-6">
+              <label for="name" class="form-label"
+                >Nome dell'artista o del gruppo *</label
+              >
+              <input
+                class="form-control"
+                type="text"
+                id="artist"
+                name="artist"
+                value=""
+              />
+            </div>
+
+            <!-- Genere musicale -->
+            <div class="col-6">
+              <label for="surname" class="form-label">Cognome *</label>
+              <input
+                class="form-control"
+                type="text"
+                id="genre"
+                name="genre"
+                value=""
+              />
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+              <label for="exampleFormControlTextarea1" class="form-label"
+                >Example textarea</label
+              >
+              <textarea
+                class="form-control"
+                id="description"
+                name="description"
+                rows="5"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!--Disclamair-->
+        <div class="alert alert-primary m-3" role="alert">
+          <strong>⚠️ Attenzione:</strong><br />
+          Acquistando il biglietto dichiari di aver preso visione delle seguenti
+          condizioni:
+          <ul class="mb-0 mt-2">
+            <li>
+              <strong>I biglietti non sono rimborsabili</strong> in alcun caso,
+              salvo annullamento dell’evento da parte dell’organizzazione.
+            </li>
+            <li>
+              <strong
+                >È possibile acquistare un solo biglietto per persona</strong
+              >. Tentativi di acquisto multiplo non saranno considerati validi e
+              potrebbero essere annullati.
+            </li>
+          </ul>
+          <p class="mt-2 mb-0">
+            Procedendo con l'acquisto, accetti integralmente queste condizioni.
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Acquista</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+<div class="col-12 col-md-9 py-4">
   <div class="row row-cols-1 row-cols-md-3 g-4">
     {# {% for performance in performances %} #}
     <div class="col">
