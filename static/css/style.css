@@ -26,3 +26,7 @@
 article{
         padding-bottom:50px;
 }
+
+.grayscale-img {
+  filter: grayscale(100%);
+}
