@@ -1,5 +1,5 @@
 import dbPackage
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for, session
 from flask_login import LoginManager, login_required, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -39,7 +39,10 @@ def sign_up():
     password = request.form.get("password")
     
     password_with_hash = generate_password_hash(password)
-    dbPackage.dbUsers.insertUser(name, surname, email, typeUser, password_with_hash)
+    if dbPackage.dbUsers.insertUser(name, surname, email, typeUser, password_with_hash):
+        flash("Ciao, <strong>" + name + "</strong>! Iscrizione effettuata con successo.", "success")
+    else:
+        flash("<strong>Iscrizione non riuscita!</strong> L'indirizzo mail inserito è già presente nel nostro DB. Riprova con un'altra mail.", "danger")
     
     return redirect(url_for("home"))
 
@@ -48,7 +51,7 @@ def auth():
     user_form = request.form.to_dict()
     user_db = dbPackage.dbUsers.getUserViaEmail(user_form["email"])
     if not user_db or not check_password_hash(user_db["Password"], user_form["password"]):
-        print("NOT LOGGED")
+        flash("<strong>Login fallito</strong>, credenziali non valide.", "danger")
         return redirect(url_for("home"))
     else:
         user = User(
@@ -58,10 +61,11 @@ def auth():
             email = user_db["EMail"],
             mode = user_db["Type"],
             password = user_db["Password"],
+            hasTicket = dbPackage.dbTickets.hasIDTicket(user_db["ID"]),
         )
         
         login_user(user)
-        print("LOGGED")
+        flash("Ciao, <strong>" + user.name + "</strong>! Login effettuato con successo.", "success")
         return redirect(url_for("home"))
         
                 
@@ -69,6 +73,7 @@ def auth():
 @login_required
 def logout():
     logout_user()
+    flash("Logout effettuato con successo!", "success")
     return redirect(url_for("home"))
         
 
@@ -83,9 +88,13 @@ def load_user(user_id):
             email=user_db["EMail"],
             mode=user_db["Type"],
             password=user_db["Password"],
+            hasTicket = dbPackage.dbTickets.hasIDTicket(user_db["ID"])
         )
     else:
         user = None
     
     return user
-    
+
+@app.route("/artisti")
+def performances():
+    return render_template("performances.html")
