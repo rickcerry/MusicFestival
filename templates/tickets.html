@@ -1,11 +1,13 @@
 {% extends "base.html" %} {% block content %}
 
 <!-- Alerts -->
+{% if current_user.mode == "Organizzatore" %}
 <div class="alert alert-primary" role="alert">
   Ti ricordiamo che in quanto <strong>organizzatore</strong> non hai il diritto
   di acquistare un biglietto per il festival. Puoi consultare i prezzi e le
   specifiche dei biglietti.
 </div>
+{% endif %}
 <div
   class="alert alert-success alert-dismissible fade show d-flex align-items-center"
   role="alert"
@@ -65,7 +67,8 @@
 </div>
 
 <div class="d-grid gap-2 col-12 col-md-6 mx-auto">
-  {% if not ticketBooked %}
+  {% if current_user.is_authenticated %} {% if current_user.mode == "Spettatore"
+  %} {% if not current_user.hasTicket %}
   <button
     type="button"
     class="btn btn-lg btn-outline-primary w-100"
@@ -74,21 +77,23 @@
   >
     Acquista ora il tuo biglietto
   </button>
-  {% endif %}
-
-  <button type="button" class="btn disabled btn-lg btn-outline-primary w-100">
-    Effettua il login
-  </button>
-
-  <button type="button" class="btn disabled btn-lg btn-warning w-100">
-    Non puoi acquistare il tuo biglietto
-  </button>
+  {% else %}
   <button type="button" class="btn disabled btn-lg btn-danger w-100">
     Hai già acquistato un biglietto
   </button>
+  {% endif %} {% else %}
+  <button type="button" class="btn disabled btn-lg btn-warning w-100">
+    Non puoi acquistare il tuo biglietto
+  </button>
+  {% endif %} {% else %}
+  <button type="button" class="btn disabled btn-lg btn-outline-primary w-100">
+    Effettua il login
+  </button>
+  {% endif %}
 </div>
 
 <!-- Modal -->
+{% if current_user.is_authenticated and not current_user.hasTicket %}
 <div
   class="modal fade"
   id="bookingModal"
@@ -147,7 +152,7 @@
                 type="text"
                 id="name"
                 name="name"
-                value="Riccardo Alfonso"
+                value="{{ current_user.name }}"
                 disabled
               />
             </div>
@@ -160,7 +165,7 @@
                 type="text"
                 id="surname"
                 name="surname"
-                value="Cerrone"
+                value="{{ current_user.surname }}"
                 disabled
               />
             </div>
@@ -173,7 +178,7 @@
                 type="text"
                 id="email"
                 name="email"
-                value="riccardo.alfonsocer@outlook.it"
+                value="{{ current_user.email }}"
                 disabled
               />
             </div>
@@ -252,5 +257,4 @@
     </div>
   </div>
 </div>
-
-{% endblock %}
+{% endif %} {% endblock %}
