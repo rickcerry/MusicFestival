@@ -43,16 +43,32 @@
             >
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link link-body-emphasis px-2">Pricing</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-body-emphasis px-2">FAQs</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-body-emphasis px-2">About</a>
+            <a
+              href="{{ url_for('performances') }}"
+              class="nav-link link-body-emphasis px-2"
+              >Artisti</a
+            >
           </li>
         </ul>
         <ul class="nav">
+          {% if current_user.is_authenticated %}
+          <li class="nav-item dropdown dropstart">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{current_user.name + " " + current_user.surname}}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li>
+                <a class="dropdown-item" href="{{ url_for('logout') }}">Esci</a>
+              </li>
+            </ul>
+          </li>
+          {% else %}
           <li class="nav-item">
             <button
               type="button"
@@ -75,6 +91,7 @@
               Iscriviti
             </button>
           </li>
+          {% endif %}
         </ul>
       </div>
     </nav>
@@ -90,7 +107,23 @@
       </div>
     </header>
 
-    <div class="container px-5 py-3">{% block content %} {% endblock %}</div>
+    <div class="container px-5 py-3">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible fade show d-flex align-items-center"
+        role="alert"
+      >
+        <div>{{ message | safe }}</div>
+        <button
+          type="button"
+          class="btn-close ms-auto"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %} {% block content %} {% endblock %}
+    </div>
 
     <!-- Modal login -->
     <div
