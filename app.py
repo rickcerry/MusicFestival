@@ -98,3 +98,15 @@ def load_user(user_id):
 @app.route("/artisti")
 def performances():
     return render_template("performances.html")
+
+@app.route("/performance")
+def performance ():
+    return render_template("performance.html")
+
+@app.route("/submit-status", methods=["POST"])
+def submit_status():
+    redirect(url_for("home"))
+    
+@app.route("/update-info", methods=["POST"])
+def update_info():
+    redirect(url_for("home"))
