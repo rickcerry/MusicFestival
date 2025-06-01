@@ -5,6 +5,21 @@ MAX_TICKETS_DAILY = 200
 
 # Designed for Tickets table 
 
+def hasIDTicket(person_id):
+    sql = "SELECT * FROM Tickets WHERE Tickets.Customer_ID = ?"
+
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(sql, (person_id,))
+    
+    exists = cursor.fetchone() is not None
+
+    cursor.close()
+    conn.close()
+
+    return exists
+
 # Insert ticket in DB
 def insertTicket(ticket_type, start_day, end_day, customer_id):
     sql = "INSERT INTO Tickets (TicketType_ID, StartDay_ID, EndDay_ID, Customer_ID) VALUES (?, ?, ?, ?)"
