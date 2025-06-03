@@ -51,3 +51,13 @@ def clearDays():
     conn.commit()
     cursor.close()
     conn.close()
+    
+def addPerson(id):
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute("UPDATE Days SET NoPeople = NoPeople + 1 WHERE ID = ?", (id,))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
