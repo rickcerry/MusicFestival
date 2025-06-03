@@ -1,0 +1,256 @@
+{% extends "my_page_template.html" %} {% block content_my_page %}
+
+<div class="container">
+  <!-- Navbar tab -->
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="{{ url_for('my_page')}}"
+        >Pagina iniziale</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="{{ url_for('drafts') }}"
+        >Esibizioni - bozze</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Esibizioni - pubblicate</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Statistiche</a>
+    </li>
+  </ul>
+
+  <div class="container py-3">
+    <!-- Pulsante aggiunta -->
+    <button
+      type="button"
+      class="btn btn-success p-2 mb-3"
+      data-bs-toggle="modal"
+      data-bs-target="#performanceModal"
+    >
+      Aggiungi una nuova esibizione
+    </button>
+
+    <!-- Lista esibizioni -->
+    <div class="col-12 py-2">
+      <div class="row row-cols-1 row-cols-md-3 g-2">
+        {% for draft in drafts %}
+        <div class="col">
+          <div class="card h-100">
+            <div class="card-header p-2">
+              <form
+                action="{{ url_for('post') }}"
+                method="POST"
+                class="d-inline"
+              >
+                <input
+                  type="hidden"
+                  name="performance_id"
+                  value="{{ draft.id }}"
+                />
+                <button type="submit" class="btn btn-success btn-sm m-1 px-1">
+                  Pubblica
+                </button>
+              </form>
+              <button type="button" class="btn btn-primary btn-sm m-1 px-1">
+                Modifica
+              </button>
+              <button type="button" class="btn btn-danger btn-sm m-1 px-1">
+                Elimina
+              </button>
+            </div>
+            <img
+              src="{{ url_for('static', filename=draft['PromotionalImage'])}}"
+              class="card-img-top grayscale-img"
+              alt="{{draft['ArtistName']}}"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{draft["ArtistName"] | e}}</h5>
+              <p class="card-text">{{Artista}}</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary">{{draft["Genre"] | e}}</small>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="performanceModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Aggiungi un'esibizione
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <form action="/crea-bozza" method="POST" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Artist name -->
+            <div class="col-12 col-lg-6">
+              <label for="artist" class="form-label"
+                >Nome dell'artista o del gruppo *</label
+              >
+              <input
+                class="form-control"
+                type="text"
+                id="artist"
+                name="artist"
+                value=""
+                required
+              />
+            </div>
+
+            <!-- Genere musicale -->
+            <div class="col-12 col-lg-6">
+              <label for="genre" class="form-label">Genere musicale *</label>
+              <input
+                class="form-control"
+                type="text"
+                id="genre"
+                name="genre"
+                value=""
+                required
+              />
+            </div>
+
+            <!-- Descrizione -->
+            <div class="col-12">
+              <label for="description" class="form-label"
+                >Descrizione dell'esibizione e dell'artista *</label
+              >
+              <textarea
+                class="form-control"
+                id="description"
+                name="description"
+                rows="5"
+                required
+              ></textarea>
+            </div>
+
+            <!-- Stage -->
+            <div class="col-12 col-lg-6">
+              <label for="stage" class="form-label">Stage *</label>
+              <select id="stage" name="stage" class="form-select" required>
+                <option value="" selected disabled>
+                  Seleziona il palco desiderato
+                </option>
+                {% for stage in stages %}
+                <option value="{{ stage['ID'] }}">
+                  {{ stage['PrimaryName'] + " - " + stage['SecondaryName'] | e
+                  }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Immagine promozionale -->
+            <div class="col-12 col-lg-6">
+              <label for="image" class="form-label"
+                >Seleziona l'immagine dell'artista o del gruppo</label
+              >
+              <input
+                class="form-control"
+                type="file"
+                id="image"
+                name="image"
+                accept=".jpg, .jpeg .png"
+              />
+            </div>
+
+            <!-- Data di inizio -->
+            <div class="col-12 col-lg-6">
+              <label for="start-date" class="form-label"
+                >Data di inizio *</label
+              >
+              <select
+                id="start-date"
+                name="start-date"
+                class="form-select"
+                required
+              >
+                <option value="" selected disabled>
+                  Seleziona la data di inizio
+                </option>
+                {% for day in days %}
+                <option value="{{ day['ID'] }}">
+                  {{ day['Day'] + " - " + day['YYYY_MM_DD'] | e }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Ora di inizio -->
+            <div class="col-12 col-md-6">
+              <label for="start-time" class="form-label">Ora di inizio *</label>
+              <input
+                type="time"
+                class="form-control"
+                id="start-time"
+                name="start-time"
+                required
+              />
+            </div>
+
+            <!-- Data di fine -->
+            <div class="col-12 col-lg-6">
+              <label for="end-date" class="form-label">Data di fine *</label>
+              <select
+                id="end-date"
+                name="end-date"
+                class="form-select"
+                required
+              >
+                <option value="" selected disabled>
+                  Seleziona la data di fine
+                </option>
+                {% for day in days %}
+                <option value="{{ day['ID'] }}">
+                  {{ day['Day'] + " - " + day['YYYY_MM_DD'] | e }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Ora di fine -->
+            <div class="col-12 col-md-6">
+              <label for="end-time" class="form-label">Ora di fine *</label>
+              <input
+                type="time"
+                class="form-control"
+                id="end-time"
+                name="end-time"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Crea una bozza</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

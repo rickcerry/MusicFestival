@@ -1,0 +1,36 @@
+{% extends "my_page_template.html" %} {% block content_my_page %}
+
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="#"
+        >Pagina iniziale</a
+      >
+    </li>
+    {% if current_user.mode == "Organizzatore" %}
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('drafts') }}">Esibizioni - bozze</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Esibizioni - pubblicate </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Statistiche </a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+      <a class="nav-link" href="#">Il mio biglietto </a>
+    </li>
+    {% endif %}
+  </ul>
+
+  <div class="container py-3">
+    <h3>Ciao, {{ current_user.name}} !</h3>
+    <p>
+      Questa è la tua area personale. In base al ruolo assegnato al tuo account
+      puoi eseguire alcune operazioni.
+    </p>
+  </div>
+</div>
+
+{% endblock %}

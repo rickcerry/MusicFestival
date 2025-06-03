@@ -1,0 +1,27 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-xxl-3 mb-4 mx-auto">
+      <div class="card" style="width: 18rem">
+        <div class="card-header">
+          <strong>{{ current_user.name + " " + current_user.surname }}</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            Email: <strong>{{ current_user.email }}</strong>
+          </li>
+          <li class="list-group-item">
+            Ruolo: <strong>{{ current_user.mode }}</strong>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-12 col-xl-9 mb-4">
+      {% block content_my_page %} {% endblock %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
